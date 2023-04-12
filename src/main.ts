@@ -1,36 +1,42 @@
 import AlonaEngine from '../packages/AlonaEngine/AlonaEngine'
-import {trace} from '../packages/AlonaEngine/render/drawers'
 import LorenzAttractor from '../packages/AlonaEngine/chaotic/LorenzAttractor'
-import * as THREE from 'three'
 
 
+//Grabs the parent div to inject the canvas
 const parent = document.querySelector('#app')
-const Lorenz = new LorenzAttractor(.01, .01, .01, 10)
+
+//Creates a new Engine instance
 const Alona = new AlonaEngine(parent)
+
+//Creates a Lorenz Attractor instance, then scales it 7x
+const Lorenz = new LorenzAttractor(Alona, {
+  scale_factor: 7
+})
+
+// Alona has a scoped increment so you can change things
+// using it instead of delta (if you want to)
 Alona.config.increment = 0.01
 
+// Overwrites Alona _process
+// process is meant to run after physics_process
+// In the future, physics_process will have high
+// render priority, so avoid updating physics
+// here
 Alona.process = (delta: number) => {
-  const geometry = new THREE.CircleGeometry( 5, 32 );
-  const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-  const circle = new THREE.Mesh( geometry, material );
-  circle.translateX(0)
-  circle.translateY(0)
-  circle.translateZ(0)
-  // Alona.render.scene.add(circle)
-  const time = new Date()
-  console.log(time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds())
-
+  // Marks the center with a dot
+  Alona.mark_center()
+  // Logs the time stamp at framerate
+  console.log(Alona.time_stamp())
   // console.log(new Date().getDate() , Alona.render.scene.children.length);
 }
 
-let obj = trace(Lorenz.points, Lorenz.colors)
+// Overwrites Alona _physics_process
+// Use this to update physics.
 Alona.physics_process = (delta: number) => {
-  Alona.render.scene.remove(obj)
-  // Lorenz.update(Alona.config.increment)
-  Lorenz.update(.01)
-  obj = trace(Lorenz.points, Lorenz.colors)
-  Alona.add(obj)
+  // Renders Lorenz
+  Lorenz.render(delta)
 }
 
+// Starts the engine
 Alona.run()
 

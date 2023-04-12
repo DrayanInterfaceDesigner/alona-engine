@@ -1,7 +1,5 @@
 import Vector3 from '../physics/Vector3'
 import { hsv_by_distance, hsv_to_rgb } from '../art/Color'
-import AlonaEngine from '../AlonaEngine'
-import { trace } from '../render/drawers'
 
 class LorenzAttractor {
 
@@ -11,12 +9,8 @@ class LorenzAttractor {
     public sigma: number = 10
     public rho: number = 28
     public beta: number = 8.0/3.0
-    public dt: number = .01
-    public scale_factor: number = 1
     public points: Array<Vector3> = new Array<Vector3>()
     public colors: Array<any> = new Array<any>()
-    public renderer: AlonaEngine
-    public entity_body: THREE.Line<THREE.BufferGeometry, THREE.Material | THREE.Material[]>
     private _x: number = this.initial_x
     private _y: number = this.initial_y
     private _z: number = this.initial_z
@@ -27,17 +21,14 @@ class LorenzAttractor {
     private _dy: number = 0
     private _dz: number = 0
     private _point_array_threshold = 2000
-
+    public scale_factor: number = 1
     
 
-    constructor(renderer: AlonaEngine, config?: any) {
-        this.renderer = renderer
-        this.initial_x = config?.x ? config.x : this.initial_x
-        this.initial_y = config?.y ? config.y : this.initial_y
-        this.initial_z = config?.z ? config.z : this.initial_z
-        this.dt = config?.dt ? config.dt : this.dt
-        this.scale_factor = config?.scale_factor ? config.scale_factor : this.scale_factor
-        this.entity_body = trace(this.points, this.colors)
+    constructor(x?: number, y?: number, z?: number, scale_factor?: number) {
+        this.initial_x = x ? x : this.initial_x
+        this.initial_y = y ? y : this.initial_y
+        this.initial_z = z ? z : this.initial_z
+        this.scale_factor = scale_factor ? scale_factor : this.scale_factor
         this.sigma
         this.rho
         this.beta
@@ -58,11 +49,11 @@ class LorenzAttractor {
         this._dz = (this._x * this._y - this.beta * this._z)
     }
 
-    update(delta: number): any {
+    update(dt: number): any {
         this.attractor()
-        this._x += this._dx * this.dt
-        this._y += this._dy * this.dt
-        this._z += this._dz * this.dt
+        this._x += this._dx * dt
+        this._y += this._dy * dt
+        this._z += this._dz * dt
         // stucks if undefined at some state
         // console.log(this._x, this._y, this._z)
         if(Number.isNaN(this._x) || Number.isNaN(this._y) || Number.isNaN(this._z)) {
@@ -73,12 +64,6 @@ class LorenzAttractor {
         }
         
         if(this._x == undefined || this._y == undefined || this._z == undefined) {
-            this._x = this._last_x
-            this._y = this._last_y
-            this._z = this._last_z
-        }
-
-        else if(!isFinite(this._x) || !isFinite(this._y) || !isFinite(this._z)) {
             this._x = this._last_x
             this._y = this._last_y
             this._z = this._last_z
@@ -102,13 +87,6 @@ class LorenzAttractor {
         this.colors.push(color)
 
         return {points: this.points, colors: this.colors}
-    }
-    
-    render(delta: number) {
-        this.renderer.remove(this.entity_body)
-        this.entity_body = trace(this.points, this.colors)
-        this.renderer.add(this.entity_body)
-        this.update(delta)
     }
 }
 

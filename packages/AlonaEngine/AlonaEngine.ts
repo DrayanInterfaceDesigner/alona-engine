@@ -43,6 +43,9 @@ class AlonaEngine {
     add(...object: THREE.Object3D[]) {
         this.render.scene.add(...object)
     }
+    remove(...object: THREE.Object3D[]) {
+        this.render.scene.remove(...object)
+    }
     setup() {
         this.render.setup()
     }
@@ -52,6 +55,21 @@ class AlonaEngine {
         this.render.controls.update()
         this.render.camera.updateProjectionMatrix()
     }
+    mark_center() {
+        const geometry = new THREE.CircleGeometry( 5, 32 );
+        const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+        const circle = new THREE.Mesh( geometry, material );
+        circle.translateX(0)
+        circle.translateY(0)
+        circle.translateZ(0)
+        this.add(circle)
+    }
+    
+    time_stamp() {
+        const time = new Date()
+        return time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds()
+    }
+
     process(delta: number) {}
     physics_process(delta: number) {}
 
