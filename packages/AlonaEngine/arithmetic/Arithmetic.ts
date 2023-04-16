@@ -19,9 +19,9 @@ const ab_direction = (a: Vector3, b: Vector3) => {
     const x2: number = Math.abs(b.x)
     const y2: number = Math.abs(b.y)
     const z2: number = Math.abs(b.z)
-    const x:  number = Math.max(x2, x1) - Math.min(x2, x1)
-    const y:  number = Math.max(y2, y1) - Math.min(y2, y1)
-    const z:  number = Math.max(z2, z1) - Math.min(z2, z1)
+    const x:  number = x2 - x1
+    const y:  number = y2 - y1
+    const z:  number = z2 - z1
     return new Vector3(x, y, z)
 }
 
