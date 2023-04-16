@@ -1,3 +1,14 @@
+
+  /**
+   *
+   * @remarks
+   * WARNING: Extremely prone to change.
+   * This class is a mess, DO NOT COUNT ON IT.
+   * For now, use THREE.Vector3 instead if you
+   * care about precision.
+   *
+   * @drayandev
+   */
 class Vector3 {
     public x: number = 0
     public y: number = 0

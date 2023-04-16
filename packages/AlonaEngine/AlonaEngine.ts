@@ -1,6 +1,20 @@
 import Render from './render/Render'
 import {Clock} from 'three'
 import * as THREE from 'three'
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
+
+  /**
+   * The engine itself. 
+   *
+   * @remarks
+   * This will be severely changed in the future, and possibly
+   * every update.
+   *
+   * @drayandev
+   * @_WIP_ALPHA
+   */
 
 class AlonaEngine {
 
@@ -23,6 +37,7 @@ class AlonaEngine {
         increment: 0.0
     }
     public render: Render
+    public composer: EffectComposer | undefined
     private _clock: Clock
     public increment: number = 0.0
     public incrementer: number = 0.0
@@ -34,6 +49,7 @@ class AlonaEngine {
         this._clock = new Clock()
         this.increment = this.config.increment
         this.incrementer
+        this.composer = undefined
         this.process
         this.physics_process = this.physics_process.bind(THREE)
         this.run = this.run.bind(this)
@@ -48,6 +64,7 @@ class AlonaEngine {
     }
     setup() {
         this.render.setup()
+        this.fx()
     }
     update() {
         this.increment = this.config.increment
@@ -73,6 +90,13 @@ class AlonaEngine {
     process(delta: number) {}
     physics_process(delta: number) {}
 
+    fx() {
+        const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 1, 0.15);
+        this.composer = new EffectComposer(this.render.renderer);
+        this.composer.addPass(new RenderPass(this.render.scene, this.render.camera));
+        this.composer.addPass(bloomPass);
+    }
+
     run() {
         const delta_time = this._clock.getDelta()
         const time_elapsed = this._clock.getElapsedTime()
@@ -81,7 +105,8 @@ class AlonaEngine {
         this.physics_process(delta_time)
         this.update()
 
-        this.render.update()
+        // this.render.update()
+        this.composer?.render()
         requestAnimationFrame(this.run)
     }
 
