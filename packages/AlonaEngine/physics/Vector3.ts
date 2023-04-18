@@ -24,7 +24,26 @@ class Vector3 {
         this.x = 0, this.y = 0, this.z = 0
         return this
     }
-    
+
+    direction_to(a: Vector3) {
+        const x1: number = Math.abs(this.x)
+        const y1: number = Math.abs(this.y)
+        const z1: number = Math.abs(this.z)
+        const x2: number = Math.abs(a.x)
+        const y2: number = Math.abs(a.y)
+        const z2: number = Math.abs(a.z)
+        const x:  number = Math.max(x2, x1) - Math.min(x2, x1)
+        const y:  number = Math.max(y2, y1) - Math.min(y2, y1)
+        const z:  number = Math.max(z2, z1) - Math.min(z2, z1)
+        return new Vector3(x, y, z)
+    }
+
+    distance_to (a: Vector3) {
+        const dif: Vector3 = this.direction_to(a)
+        const magnitude: number = Math.pow(dif.x, 2) + Math.pow(dif.y, 2) + Math.pow(dif.z, 2)
+        return Math.sqrt(magnitude)
+    }
+
     add(v: Vector3) {
         return new Vector3(this.x + v.x, this.y + v.y, this.z + v.z)
     }

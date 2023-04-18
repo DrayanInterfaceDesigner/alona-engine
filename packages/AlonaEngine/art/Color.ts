@@ -108,7 +108,17 @@ const hsv_by_distance = (vector3: Vector3, origin?: Vector3): any => {
     }
 }
 
+const lerp_color = (c1:any, c2:any, t:any) => {
+  const rgb = {
+    r: lerp(c1.r, c2.r, t) % 255,
+    g: lerp(c1.g, c2.g, t) % 255,
+    b: lerp(c1.b, c2.b, t) % 255,
+  }
+  return rgb
+} 
+
 export {
     hsv_to_rgb,
-    hsv_by_distance
+    hsv_by_distance,
+    lerp_color
 }

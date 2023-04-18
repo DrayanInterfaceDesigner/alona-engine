@@ -1,10 +1,16 @@
-import AlonaEngine from "../AlonaEngine"
-import Vector3 from "../physics/Vector3"
+import AlonaEngine from "../../AlonaEngine"
+import Vector3 from "../../physics/Vector3"
 import BaseAttractor from "./BaseAttractor"
 
-class LorenzAttractor extends BaseAttractor {
+class Lorenz extends BaseAttractor {
+    // constants
+    public sigma: number = 10
+    public rho: number = 28
+    public beta: number = 8.0/3.0
+    
     constructor(renderer: AlonaEngine, config: any) {
         super(renderer, config)
+        this.dt = config.dt ? config.dt : 0.01
         this.initial_pos = new Vector3(.1, .1, .1)
         this._position = this.initial_pos
     }
@@ -16,4 +22,4 @@ class LorenzAttractor extends BaseAttractor {
     }
 }
 
-export default LorenzAttractor
+export default Lorenz
