@@ -1,13 +1,13 @@
-import AlonaEngine from "../AlonaEngine"
-import Vector3 from "../physics/Vector3"
+import AlonaEngine from "../../AlonaEngine"
+import Vector3 from "../../physics/Vector3"
 import BaseAttractor from "./BaseAttractor"
 
-class HalvorsenAttractor extends BaseAttractor {
+class Halvorsen extends BaseAttractor {
 
-    public alpha: number
+    public alpha: number = 1.4
     constructor(renderer: AlonaEngine, config: any) {
         super(renderer, config)
-        this.alpha = 1.6
+        this.dt = config.dt ? config.dt : 0.01
         this.initial_pos = new Vector3(1,0,0)
         this._position = this.initial_pos
         this._point_array_threshold = 2000
@@ -32,4 +32,4 @@ class HalvorsenAttractor extends BaseAttractor {
     }
 }
 
-export default HalvorsenAttractor
+export default Halvorsen

@@ -67,7 +67,31 @@ const trace = (points: any, colors: any):Line => {
  *
  * @drayandev
  */
-function tracer(points: any, colors: any): Line {
+const tracer = (points: any, colors: any, smooth?: number): Line =>  {
+  
+  const scale = smooth ? smooth : 1 
+  
+  // fixes the first two points:zero colors ratio (min of 2 points are necessary for THREE curves)
+  const colorsArray = new Float32Array(((colors.length * 3) * scale) + (2 * scale) * 3)
+  colors.forEach((color: any, index: number) => {
+      for(let k = 0; k < scale; k++) {
+        colorsArray[(((index) * (3 * scale)) + (0 + (k * 3)))] = (Math.abs(color.r / 255))
+        colorsArray[(((index) * (3 * scale)) + (1 + (k * 3)))] = (Math.abs(color.g / 255))
+        colorsArray[(((index) * (3 * scale)) + (2 + (k * 3)))] = (Math.abs(color.b / 255))
+      }
+  })
+
+  const curve = new THREE.CatmullRomCurve3(points);
+  const geometry = new THREE.BufferGeometry().setFromPoints(curve.getPoints(points.length * scale));
+  geometry.setAttribute('color', new BufferAttribute(colorsArray, 3));
+  const material = new THREE.LineBasicMaterial({ vertexColors: true, linewidth: 20 });
+  const line = new THREE.Line(geometry, material);
+
+  return line
+}
+
+
+const tracer2 = (points: any, colors: any): Line =>  {
   
   // console.log('points: ', points.length)
 
@@ -87,5 +111,6 @@ function tracer(points: any, colors: any): Line {
 
   return line
 }
+
 
 export {trace, tracer}
