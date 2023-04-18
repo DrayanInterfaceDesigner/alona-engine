@@ -38,6 +38,7 @@ class BaseAttractor {
 
     // Cosmetics
     public flex_rotation: Vector3
+    public smooth_factor: number
 
     constructor(engine: AlonaEngine, config?: any) {
         this.engine = engine
@@ -52,6 +53,7 @@ class BaseAttractor {
         this._position = new Vector3(this.initial_pos.x, this.initial_pos.y, this.initial_pos.z)
         this._last_pos = new Vector3(this._position.x, this._position.y, this._position.z)
         this.gradient = config.gradient ? config.gradient : null
+        this.smooth_factor = config.smooth_factor ? config.smooth_factor : 5
         this._d
 
         this._zoom_current = 0
@@ -141,7 +143,7 @@ class BaseAttractor {
     render(delta: number):void {
         this.smooth_zoom()
         this.engine.remove(this.entity_body)
-        this.entity_body = tracer(this.points, this.colors, Math.floor(this.scale_factor / 2))
+        this.entity_body = tracer(this.points, this.colors, this.smooth_factor)
         this.engine.add(this.entity_body)
         this.update(delta)
 

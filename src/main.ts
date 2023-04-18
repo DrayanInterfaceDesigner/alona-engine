@@ -11,7 +11,9 @@ const Alona = new AlonaEngine(parent)
 //Creates a Chaotic Attractor instance, then scales it 7x
 const SprottLinzDAttractor = new SprottLinzD(Alona, {
   scale_factor: 1,
+  smooth_factor: 5,
   zoom: 15,
+
   gradient: {
     colors: {
       from: {r: 86, g: 163, b: 245},
