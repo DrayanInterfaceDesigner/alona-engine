@@ -34,7 +34,7 @@ Alona.process = (delta: number) => {
   // Marks the center with a dot
   // Alona.mark_center()
   // Logs the time stamp at framerate
-  console.log(Alona.time_stamp(), delta)
+  console.log(Alona.time_stamp())
   Alona.update()
 }
 
