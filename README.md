@@ -1,6 +1,6 @@
 # Alona Engine
 
-A physics engine for easier simulations on the browser. Current version: 1.2.1-alpha.
+A physics engine for easier simulations on the browser. Current version: 1.3.0-alpha.
 
 ## A Humble Beginning
 
